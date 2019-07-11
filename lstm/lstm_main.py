@@ -116,4 +116,5 @@ if __name__ == "__main__":
     epoch = int(sys.argv[1])
     batch = int(sys.argv[2])
     lstm(df,kunag,matnr,epoch,batch)
-    
+
+# to run use python main.py <epoch_number> <batch_size>
