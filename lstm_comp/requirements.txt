@@ -1,0 +1,4 @@
+mkdir weights
+mkdir weight_results
+mkdir graphs_weights
+mkdir comp_graphs
