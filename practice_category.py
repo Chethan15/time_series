@@ -1,90 +1,35 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 import pandas as pd
 import numpy as np
-
-
-# In[ ]:
-
-
 main_df = pd.read_csv("4200_C005_2019_03_03.tsv", sep = ",", header = None)
-
-
-# In[ ]:
-
-
 main_df.columns  = ["kunag","matnr","date","quantity","price"]
 del main_df["price"]
 
-
-# In[ ]:
-
-
+#taking only first 1000 rows
 main_df = main_df.head(1000)
 
-
-# In[ ]:
-
-
-main_df.shape
-
-
-# In[ ]:
-
-
+#removing negative quantities
 main_df = main_df[main_df.quantity > 0]
 
-
-# In[ ]:
-
-
-main_df.shape
-
-
-# In[ ]:
-
-
+#groupby customer and material number
 main_df_groups = main_df.groupby(["kunag","matnr"])
 
-
-# In[ ]:
-
-
+#changing datetime fromat
 main_df["date"] = main_df["date"].apply(lambda x: pd.to_datetime(x, format="%Y%m%d"))
 
-
-# In[ ]:
-
-
+#minimum and maximum date
 main_df_date = main_df_groups["date"].agg([min,max]).reset_index()
 
-
-# In[ ]:
-
-
+#no of days in a customer material series, (history of series)
 main_df_date["diff_in_days"] = main_df_date["max"]- main_df_date["min"]
 
-
-# In[ ]:
-
-
+#changing days in a numerical format
 main_df_date["diff_in_days"] = main_df_date["diff_in_days"].apply(lambda x : x.days)
-
-
-# In[ ]:
-
 
 current_date = "20190725"
 current_date = pd.to_datetime(curr_date , format = "%Y%m%d")
 
 
-# In[ ]:
-
-
+#
 main_df_frequency = main_df.groupby(["kunag", "matnr"]).filter(lambda x: x["date"].between(current_date, current_date-pd.to_timedelta(92, unit='d')).sum()>0)
 
 
